@@ -51,28 +51,13 @@ export function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-cyan-500 group-hover:w-full transition-all duration-300" />
               </a>
             ))}
-            {user ? (
-              <div className="flex items-center gap-4">
-                <Link
-                  href="/admin"
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                >
-                  <LogOut className="h-5 w-5" />
-                </button>
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                className="px-4 py-2 rounded-lg border border-purple-500/50 text-purple-400 hover:bg-purple-500/10 transition-all duration-300"
+            {user && (
+              <button
+                onClick={handleSignOut}
+                className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
               >
-                Admin
-              </Link>
+                <LogOut className="h-5 w-5" />
+              </button>
             )}
           </div>
 
@@ -99,30 +84,13 @@ export function Navbar() {
                   {link.label}
                 </a>
               ))}
-              {user ? (
-                <>
-                  <Link
-                    href="/admin"
-                    onClick={() => setIsOpen(false)}
-                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-medium text-center"
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={handleSignOut}
-                    className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-purple-500/50 text-purple-400 text-center"
+              {user && (
+                <button
+                  onClick={handleSignOut}
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors"
                 >
-                  Admin
-                </Link>
+                  Sign Out
+                </button>
               )}
             </div>
           </div>
