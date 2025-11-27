@@ -1,8 +1,8 @@
-import { Code2, Palette, Zap, Coffee } from "lucide-react"
+import { Code2, Palette, Zap, Coffee, Landmark } from "lucide-react"
 
 const skills = [
   { icon: Code2, title: "Development", description: "Clean, efficient code that scales" },
-  { icon: Palette, title: "Design", description: "Beautiful interfaces that inspire" },
+  { icon: Landmark, title: "Architecture", description: "Designing robust and scalable systems" },
   { icon: Zap, title: "Performance", description: "Lightning-fast user experiences" },
   { icon: Coffee, title: "Dedication", description: "Committed to excellence" },
 ]
@@ -23,19 +23,29 @@ export function AboutSection() {
           {/* Bio */}
           <div className="space-y-6">
             <p className="text-lg text-slate-300 leading-relaxed">
-              I'm a passionate full-stack developer with a love for creating innovative digital solutions. With
-              expertise in modern web technologies, I transform ideas into reality.
+              I'm a passionate full-stack developer with a love for creating innovative digital solutions. With over
+              5 years professional experience in the Salesforce ecosystem, I specialize in building scalable web applications using modern technologies.
             </p>
-            <p className="text-lg text-slate-400 leading-relaxed">
-              When I'm not coding, you'll find me exploring new technologies, contributing to open source, or sharing
-              knowledge with the developer community.
-            </p>
-
             {/* Tech Stack */}
             <div className="pt-6">
-              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Tech Stack</h3>
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Professional Stack</h3>
               <div className="flex flex-wrap gap-2">
-                {["React", "Next.js", "TypeScript", "Node.js", "Firebase", "Tailwind CSS", "PostgreSQL", "GraphQL"].map(
+                {["Salesforce", "Apex", "Lightning Web Components", "SOQL", "Salesforce DX"].map(
+                  (tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 text-sm rounded-lg bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:border-purple-500/50 hover:text-purple-400 transition-colors cursor-default"
+                    >
+                      {tech}
+                    </span>
+                  ),
+                )}
+              </div>
+            </div>
+            <div className="pt-6">
+              <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Personal Stack</h3>
+              <div className="flex flex-wrap gap-2">
+                {["Next.js", "TypeScript", "Node.js", "Firebase", "Tailwind CSS"].map(
                   (tech) => (
                     <span
                       key={tech}
