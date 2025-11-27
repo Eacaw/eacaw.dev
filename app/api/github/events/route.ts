@@ -73,10 +73,12 @@ export async function GET() {
       switch (event.type) {
         case "PushEvent": {
           summary.pushes++
-          const commitCount = event.payload?.commits?.length || 0
+          // GitHub API may truncate commits array, use size field as fallback
+          const commitsArray = event.payload?.commits || []
+          const commitCount = event.payload?.size || commitsArray.length || 0
           summary.commits += commitCount
           const branch = event.payload?.ref?.replace("refs/heads/", "") || "unknown"
-          const commits = (event.payload?.commits || []).map((c: { sha: string; message: string }) => ({
+          const commits = commitsArray.map((c: { sha: string; message: string }) => ({
             sha: c.sha?.substring(0, 7),
             message: c.message?.split("\n")[0] || "No message",
           }))
