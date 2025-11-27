@@ -30,7 +30,7 @@ export function GitHubActivitySection() {
             </h2>
           </div>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-cyan-500 mx-auto rounded-full" />
-          <p className="mt-4 text-slate-400">My open source contributions and recent activity</p>
+          <p className="mt-4 text-slate-400">My yearly GitHub contributions and recent activity</p>
         </div>
 
         <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 backdrop-blur-sm">
