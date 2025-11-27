@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Sparkles } from "lucide-react"
 
-const roles = ["Full Stack Developer", "UI/UX Enthusiast", "Open Source Contributor", "Problem Solver"]
+const roles = ["Full Stack Developer", "Game Jammer", "Salesforce Engineer", "Tech Enthusiast", "Open Source Contributor"]
 
 export function HeroSection() {
   const [currentRole, setCurrentRole] = useState(0)
@@ -99,8 +99,7 @@ export function HeroSection() {
 
         {/* Description */}
         <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-          I craft digital experiences that blend beautiful design with powerful functionality. Let's build something
-          amazing together.
+          Senior Software Engineer. NextFire Stack. Salesforce Engineer.
         </p>
 
         {/* CTA Buttons */}
