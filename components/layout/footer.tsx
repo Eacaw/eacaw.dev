@@ -2,10 +2,9 @@ import { Github, Linkedin, Twitter, Mail, Heart } from "lucide-react"
 
 export function Footer() {
   const socialLinks = [
-    { icon: Github, href: "https://github.com", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Mail, href: "mailto:hello@example.com", label: "Email" },
+    { icon: Github, href: "https://github.com/Eacaw", label: "GitHub" },
+    { icon: Linkedin, href: "https://linkedin.com/in/david-pinchen", label: "LinkedIn" },
+    { icon: Mail, href: "mailto:davidpinchen@gmail.com", label: "Email" },
   ]
 
   return (
@@ -29,13 +28,7 @@ export function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="flex items-center gap-2 text-slate-400 text-sm">
-            <span>Built with</span>
-            <Heart className="h-4 w-4 text-purple-500 fill-purple-500 animate-pulse" />
-            <span>using Next.js & Firebase</span>
-          </div>
-
-          <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Portfolio. All rights reserved.</p>
+          <p className="text-slate-500 text-sm">© {new Date().getFullYear()} Eacaw. All rights reserved.</p>
         </div>
       </div>
     </footer>
