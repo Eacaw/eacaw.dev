@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 
-const GITHUB_USERNAME = "Eacaw"
+const GITHUB_ACCOUNTS = [
+  { username: "Eacaw", tokenEnvVar: "GITHUB_PAT" },
+  { username: "davep-gh", tokenEnvVar: "GITHUB_PAT_WORK" },
+]
 
 export interface DetailedEvent {
   id: string
@@ -9,6 +12,7 @@ export interface DetailedEvent {
   repoUrl: string
   timestamp: string
   description: string
+  account: string
   details?: {
     title?: string
     body?: string
@@ -20,9 +24,7 @@ export interface DetailedEvent {
   }
 }
 
-export async function GET() {
-  const token = process.env.GITHUB_PAT
-
+async function fetchEventsForAccount(username: string, token: string | undefined) {
   const headers: HeadersInit = {
     Accept: "application/vnd.github.v3+json",
   }
@@ -31,14 +33,28 @@ export async function GET() {
     headers.Authorization = `Bearer ${token}`
   }
 
+  const response = await fetch(`https://api.github.com/users/${username}/events?per_page=500`, { headers })
+
+  if (!response.ok) {
+    console.error(`Failed to fetch events for ${username}`)
+    return []
+  }
+
+  const events = await response.json()
+  return events.map((event: Record<string, unknown>) => ({ ...event, _account: username }))
+}
+
+export async function GET() {
   try {
-    const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=500`, { headers })
+    // Fetch events from all accounts in parallel
+    const allEventsArrays = await Promise.all(
+      GITHUB_ACCOUNTS.map((account) => fetchEventsForAccount(account.username, process.env[account.tokenEnvVar]))
+    )
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch events")
-    }
-
-    const events = await response.json()
+    // Combine and sort all events by timestamp
+    const events = allEventsArrays.flat().sort(
+      (a, b) => new Date(b.created_at as string).getTime() - new Date(a.created_at as string).getTime()
+    )
 
     const summary = {
       pushes: 0,
@@ -61,6 +77,7 @@ export async function GET() {
     for (const event of events) {
       const repoName = event.repo?.name?.split("/")[1] || event.repo?.name
       const fullRepoName = event.repo?.name || repoName
+      const account = event._account || "unknown"
       if (repoName) recentRepos.add(repoName)
 
       const baseEvent = {
@@ -68,6 +85,7 @@ export async function GET() {
         repo: repoName,
         repoUrl: `https://github.com/${fullRepoName}`,
         timestamp: event.created_at,
+        account,
       }
 
       switch (event.type) {

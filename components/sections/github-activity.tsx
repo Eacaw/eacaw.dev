@@ -5,7 +5,10 @@ import { ExternalLink, Github } from "lucide-react"
 import { ContributionHeatmap } from "@/components/github/contribution-heatmap"
 import { ActivitySummary } from "@/components/github/activity-summary"
 
-const GITHUB_USERNAME = "Eacaw"
+const GITHUB_ACCOUNTS = [
+  { username: "Eacaw", label: "Personal" },
+  { username: "davep-gh", label: "Work" },
+]
 
 export function GitHubActivitySection() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
@@ -44,18 +47,21 @@ export function GitHubActivitySection() {
           </div>
         </div>
 
-        {/* View More Link */}
-        <div className="text-center mt-8">
-          <a
-            href={`https://github.com/${GITHUB_USERNAME}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-purple-500/50 hover:text-purple-400 transition-all duration-300"
-          >
-            <Github className="h-5 w-5" />
-            View Full Profile
-            <ExternalLink className="h-4 w-4" />
-          </a>
+        {/* View More Links */}
+        <div className="text-center mt-8 flex flex-wrap gap-4 justify-center">
+          {GITHUB_ACCOUNTS.map((account) => (
+            <a
+              key={account.username}
+              href={`https://github.com/${account.username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-300 hover:border-purple-500/50 hover:text-purple-400 transition-all duration-300"
+            >
+              <Github className="h-5 w-5" />
+              {account.label} Profile
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          ))}
         </div>
       </div>
     </section>
