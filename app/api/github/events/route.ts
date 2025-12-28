@@ -185,7 +185,7 @@ export async function GET() {
     const detailedEvents: DetailedEvent[] = []
 
     for (const event of events) {
-      const repoName = event.repo?.name?.split("/")[1] || event.repo?.name
+      const repoName = event.repo?.name?.split("/")[1] || event.repo?.name || "unknown"
       const fullRepoName = event.repo?.name || repoName
       const account = event._account || "unknown"
       if (repoName) recentRepos.add(repoName)
