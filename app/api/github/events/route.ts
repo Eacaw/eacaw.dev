@@ -97,7 +97,18 @@ export interface DetailedEvent {
   }
 }
 
-async function fetchEventsForAccount(username: string, token: string | undefined) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface GitHubEvent {
+  id: string
+  type: string
+  repo?: { name?: string }
+  created_at: string
+  payload?: any
+  _account?: string
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+async function fetchEventsForAccount(username: string, token: string | undefined): Promise<GitHubEvent[]> {
   const headers: HeadersInit = {
     Accept: "application/vnd.github.v3+json",
   }
@@ -106,7 +117,7 @@ async function fetchEventsForAccount(username: string, token: string | undefined
     headers.Authorization = `Bearer ${token}`
   }
 
-  const allEvents: Record<string, unknown>[] = []
+  const allEvents: GitHubEvent[] = []
   const thirtyDaysAgo = new Date()
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
@@ -122,12 +133,12 @@ async function fetchEventsForAccount(username: string, token: string | undefined
       break
     }
 
-    const events = await response.json()
+    const events: GitHubEvent[] = await response.json()
     if (!events.length) break
 
     // Filter to only include events from the last 30 days
     for (const event of events) {
-      const eventDate = new Date(event.created_at as string)
+      const eventDate = new Date(event.created_at)
       if (eventDate >= thirtyDaysAgo) {
         allEvents.push({ ...event, _account: username })
       }
@@ -135,7 +146,7 @@ async function fetchEventsForAccount(username: string, token: string | undefined
 
     // If the oldest event on this page is older than 30 days, stop paginating
     const oldestEvent = events[events.length - 1]
-    if (new Date(oldestEvent.created_at as string) < thirtyDaysAgo) {
+    if (new Date(oldestEvent.created_at) < thirtyDaysAgo) {
       break
     }
   }
@@ -152,7 +163,7 @@ export async function GET() {
 
     // Combine and sort all events by timestamp
     const events = allEventsArrays.flat().sort(
-      (a, b) => new Date(b.created_at as string).getTime() - new Date(a.created_at as string).getTime()
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
 
     const summary = {
