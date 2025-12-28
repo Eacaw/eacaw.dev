@@ -5,6 +5,79 @@ const GITHUB_ACCOUNTS = [
   { username: "davep-gh", tokenEnvVar: "GITHUB_PAT_WORK" },
 ]
 
+const WORK_ACCOUNT = "davep-gh"
+
+function sanitizeWorkEvent(event: DetailedEvent): DetailedEvent {
+  if (event.account !== WORK_ACCOUNT) {
+    return event
+  }
+
+  const sanitized: DetailedEvent = {
+    ...event,
+    repo: "work",
+    repoUrl: "",
+    details: undefined,
+  }
+
+  switch (event.type) {
+    case "push":
+      sanitized.description = "Pushed commits at work"
+      break
+    case "pr-opened":
+      sanitized.description = "Opened a PR at work"
+      break
+    case "pr-merged":
+      sanitized.description = "Merged a PR at work"
+      break
+    case "pr-closed":
+      sanitized.description = "Closed a PR at work"
+      break
+    case "issue-opened":
+      sanitized.description = "Opened an issue at work"
+      break
+    case "issue-closed":
+      sanitized.description = "Closed an issue at work"
+      break
+    case "review":
+      sanitized.description = "Reviewed a PR at work"
+      break
+    case "comment":
+      sanitized.description = "Commented on an issue at work"
+      break
+    case "commit-comment":
+      sanitized.description = "Commented on a commit at work"
+      break
+    case "review-comment":
+      sanitized.description = "Review comment on a PR at work"
+      break
+    case "fork":
+      sanitized.description = "Forked a repository at work"
+      break
+    case "star":
+      sanitized.description = "Starred a repository at work"
+      break
+    case "repo-created":
+      sanitized.description = "Created a repository at work"
+      break
+    case "branch-created":
+      sanitized.description = "Created a branch at work"
+      break
+    case "tag-created":
+      sanitized.description = "Created a tag at work"
+      break
+    case "delete":
+      sanitized.description = "Deleted a branch at work"
+      break
+    case "release":
+      sanitized.description = "Published a release at work"
+      break
+    default:
+      sanitized.description = "Activity at work"
+  }
+
+  return sanitized
+}
+
 export interface DetailedEvent {
   id: string
   type: string
@@ -33,15 +106,41 @@ async function fetchEventsForAccount(username: string, token: string | undefined
     headers.Authorization = `Bearer ${token}`
   }
 
-  const response = await fetch(`https://api.github.com/users/${username}/events?per_page=500`, { headers })
+  const allEvents: Record<string, unknown>[] = []
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-  if (!response.ok) {
-    console.error(`Failed to fetch events for ${username}`)
-    return []
+  // Paginate through events (GitHub allows up to 10 pages of 100 events)
+  for (let page = 1; page <= 10; page++) {
+    const response = await fetch(
+      `https://api.github.com/users/${username}/events?per_page=100&page=${page}`,
+      { headers }
+    )
+
+    if (!response.ok) {
+      console.error(`Failed to fetch events for ${username} page ${page}`)
+      break
+    }
+
+    const events = await response.json()
+    if (!events.length) break
+
+    // Filter to only include events from the last 30 days
+    for (const event of events) {
+      const eventDate = new Date(event.created_at as string)
+      if (eventDate >= thirtyDaysAgo) {
+        allEvents.push({ ...event, _account: username })
+      }
+    }
+
+    // If the oldest event on this page is older than 30 days, stop paginating
+    const oldestEvent = events[events.length - 1]
+    if (new Date(oldestEvent.created_at as string) < thirtyDaysAgo) {
+      break
+    }
   }
 
-  const events = await response.json()
-  return events.map((event: Record<string, unknown>) => ({ ...event, _account: username }))
+  return allEvents
 }
 
 export async function GET() {
@@ -358,7 +457,7 @@ export async function GET() {
       summary,
       recentRepos: Array.from(recentRepos).slice(0, 5),
       totalEvents: events.length,
-      detailedEvents: detailedEvents.slice(0, 50), // Limit to most recent 50 events
+      detailedEvents: detailedEvents.map(sanitizeWorkEvent), // Return all events from last 30 days
     })
   } catch (error) {
     console.error("GitHub events error:", error)

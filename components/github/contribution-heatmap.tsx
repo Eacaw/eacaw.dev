@@ -1,56 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Loader2, ChevronDown } from "lucide-react"
+import { useGitHubData } from "@/contexts/github-data-context"
 
-interface ContributionDay {
-  contributionCount: number
-  date: string
-  weekday: number
-}
-
-interface ContributionWeek {
-  contributionDays: ContributionDay[]
-}
-
-interface ContributionData {
-  totalContributions: number
-  weeks: ContributionWeek[]
-}
-
-interface ContributionHeatmapProps {
-  selectedYear: number
-  onYearChange: (year: number) => void
-}
-
-export function ContributionHeatmap({ selectedYear, onYearChange }: ContributionHeatmapProps) {
-  const [data, setData] = useState<ContributionData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [hoveredDay, setHoveredDay] = useState<ContributionDay | null>(null)
+export function ContributionHeatmap() {
+  const {
+    contributionData: data,
+    contributionLoading: loading,
+    contributionError: error,
+    selectedYear,
+    setSelectedYear,
+  } = useGitHubData()
+  
+  const [hoveredDay, setHoveredDay] = useState<{ contributionCount: number; date: string; weekday: number } | null>(null)
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false)
 
   const currentYear = new Date().getFullYear()
   const yearOptions = Array.from({ length: currentYear - 2019 }, (_, i) => currentYear - i)
-
-  useEffect(() => {
-    const fetchContributions = async () => {
-      setLoading(true)
-      try {
-        const response = await fetch(`/api/github/contributions?year=${selectedYear}`)
-        if (!response.ok) throw new Error("Failed to fetch")
-        const result = await response.json()
-        if (result.error) throw new Error(result.error)
-        setData(result)
-      } catch (err) {
-        setError("Unable to load contribution data")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchContributions()
-  }, [selectedYear])
 
   const getContributionColor = (count: number) => {
     if (count === 0) return "bg-slate-800/50"
@@ -137,7 +104,7 @@ export function ContributionHeatmap({ selectedYear, onYearChange }: Contribution
                 <button
                   key={year}
                   onClick={() => {
-                    onYearChange(year)
+                    setSelectedYear(year)
                     setIsYearDropdownOpen(false)
                   }}
                   className={`block w-full px-4 py-2 text-left hover:bg-slate-700 transition-colors ${
