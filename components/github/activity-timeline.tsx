@@ -52,11 +52,17 @@ const EVENT_TYPES: EventType[] = [
   { key: "release", label: "Releases", color: "#84cc16", icon: Package, sourceTypes: ["release"] },
 ]
 
+interface ChartDataPoint {
+  date: string
+  displayDate: string
+  [key: string]: string | number
+}
+
 export function ActivityTimeline() {
   const { eventsData: data, eventsLoading: loading, eventsError: error } = useGitHubData()
   const [activeTypes, setActiveTypes] = useState<Set<string>>(new Set(EVENT_TYPES.map(t => t.key)))
 
-  const chartData = useMemo(() => {
+  const chartData = useMemo((): ChartDataPoint[] => {
     if (!data?.detailedEvents) return []
 
     const today = startOfDay(new Date())
