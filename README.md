@@ -1,36 +1,176 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🌐 eacaw.dev
 
-First, run the development server:
+<img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" alt="React" />
+<img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" />
+<img src="https://img.shields.io/badge/Tailwind-4-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**A personal portfolio website with a cyberpunk-inspired dark theme**
+
+[🔗 Live Site](https://eacaw.dev) • [📂 Source Code](https://github.com/Eacaw/eacaw.dev)
+
+</div>
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎨 **Modern UI/UX**
+- Cyberpunk-inspired dark theme with purple/cyan accents
+- Smooth animations and transitions
+- Fully responsive design
+- Custom scrollbar styling
+
+</td>
+<td width="50%">
+
+### 📊 **GitHub Integration**
+- Live contribution heatmap
+- 14-day activity timeline with filtering
+- Multi-account support (personal & work)
+- Work activity anonymization
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🛠️ **Project Showcase**
+- Dynamic project cards with modals
+- Markdown content support
+- Firebase-powered CMS
+- Admin dashboard for content management
+
+</td>
+<td width="50%">
+
+### 🔐 **Authentication**
+- Firebase Authentication
+- Protected admin routes
+- Secure content management
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Tech Stack
+
+| Category | Technologies |
+|----------|-------------|
+| **Framework** | Next.js 16, React 19 |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS 4, Radix UI |
+| **Backend** | Firebase (Auth, Firestore) |
+| **Charts** | Recharts |
+| **Deployment** | Docker, Node.js |
+
+---
+
+## 📁 Project Structure
+
+```
+eacaw.dev/
+├── app/                    # Next.js App Router
+│   ├── admin/              # Admin dashboard
+│   ├── api/                # API routes (GitHub integration)
+│   ├── login/              # Authentication page
+│   └── page.tsx            # Main landing page
+├── components/
+│   ├── github/             # GitHub activity components
+│   ├── layout/             # Navbar, Footer
+│   ├── sections/           # Hero, About, Projects, Contact
+│   └── ui/                 # Reusable UI components
+├── contexts/               # React Context providers
+├── lib/                    # Utilities and Firebase config
+└── Dockerfile              # Production Docker image
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏃 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Prerequisites
 
-## Learn More
+- Node.js 20+
+- npm or yarn
+- Firebase project (for authentication & data)
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Clone the repository
+git clone https://github.com/Eacaw/eacaw.dev.git
+cd eacaw.dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Install dependencies
+npm install
 
-## Deploy on Vercel
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Firebase config and GitHub PATs
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Run development server
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
+
+### Environment Variables
+
+```env
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# GitHub Personal Access Tokens
+GITHUB_PAT=           # Personal account
+GITHUB_PAT_WORK=      # Work account (optional)
+```
+
+---
+
+## 🐳 Docker Deployment
+
+```bash
+# Build the Docker image
+docker build -t eacaw-dev \
+  --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=xxx \
+  --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=xxx \
+  # ... other build args
+  .
+
+# Run the container
+docker run -p 3000:3000 eacaw-dev
+```
+
+---
+
+## 📜 Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npx tsc --noEmit` | Type check without building |
+
+---
+
+<div align="center">
+
+**Built with 💜 by [Eacaw](https://github.com/Eacaw)**
+
+</div>
