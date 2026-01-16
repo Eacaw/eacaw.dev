@@ -23,7 +23,19 @@ export function ContactSection() {
         throw new Error("Please fill in all fields")
       }
 
-      // Save to Firestore
+      // Send email via Resend
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to send message")
+      }
+
+      // Also save to Firestore for backup
       await addDoc(collection(db, "messages"), {
         email: formData.email,
         message: formData.message,
